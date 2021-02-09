@@ -1,6 +1,7 @@
 {
   "name": "airtable-i18n",
   "version": "1.0.7",
+  "description": "A CLI to generate i18n translations from airtable.",
   "main": "index.js",
   "license": "MIT",
   "repository": {

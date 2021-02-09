@@ -43,6 +43,10 @@ Usage
 |:---:|:--:|:--:|:--:|
 |Title|Demo translation|Demo-Übersetzung|Traducción de demostración|
 
+### Example usage
+
+Automatise the CLI command to run before each commit to generate translations each time when a commit is submited.
+
 ## CLI
 
 `npx airtable-i18n`
