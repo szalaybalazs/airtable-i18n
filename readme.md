@@ -97,3 +97,16 @@ generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true })
 | BASEID | True | The ID of the airtable base | - |
 | output | false | The output directory for translations | '.' |
 | beautify | false | Whether to beautify the generated translation files | false |
+
+## Access translation
+
+The translations are grouped under the name of the tables. 
+
+The key value of the record is used as the key of the translation.
+
+### Example using react
+
+```js
+const { t } = useTranslation('<TABLE_NAME>');
+t('<TRANSLATION_KEY>);
+```
