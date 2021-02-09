@@ -1,0 +1,24 @@
+{
+  "name": "airtable-i18n",
+  "version": "1.0.6",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/szalaybalazs/airtable-i18n.git"
+  },
+  "dependencies": {
+    "airtable": "^0.10.1",
+    "commander": "^7.0.0",
+    "dotenv": "^8.2.0"
+  },
+  "author": "Balázs Szalay <szalay.balazs.ms@gmail.com>",
+  "bin": {
+    "airtable-i18n": "./cli.js"
+  },
+  "keywords": [
+    "i18n",
+    "airtable",
+    "translation"
+  ]
+}
