@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const Airtable = require('airtable');
+const util = require('util');
 
 const getBase = (base) => (table) =>
   new Promise((res, rej) => {
@@ -40,14 +41,18 @@ const parse = async (apiKey, baseId) => {
   return languages;
 };
 
+const createFile = (filepath, format, content, beautify = false) => new Promise((res) => {
+  const data = { current: '' };
+  if (format === 'json') data.current = JSON.stringify(content, null, beautify ? 2 : 0)
+  else if (format === 'js') data.current = `module.exports = ${util.inspect(content)}`;
+  fs.writeFile(`${filepath}.${format}`, data.current, { encoding: 'utf8' }, res)
+})
+
 const generate = async (languages, dir, beautify = false, format = 'js') => {
   const dirPath = path.resolve(dir);
-  for (let i = 0; i < dirPath.split('/').length; i++) { 
-    const currentPath = dirPath.split('/').slice(0, i).join('/');
-    if (!currentPath) continue;
-    if (!fs.existsSync(currentPath)) fs.mkdirSync(currentPath);
-  }
-  Promise.all(Object.keys(languages).map(key => new Promise((res) => fs.writeFile(`${dirPath}/${key}.${format}`, `${format === 'js' ? 'module.exports = ' : ''}${JSON.stringify(languages[key], null, beautify ? 2 : 0)}`, { encoding: 'utf8' }, res))));
+  if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
+
+  Promise.all(Object.keys(languages).map(key => createFile(`${dirPath}/${key}`, format, languages[key], beautify)));
 };
 
 const generateTranslation = async (apikey, baseId, { output = '.', beutify = false, format = 'js' }) => {
