@@ -18,7 +18,7 @@ const getBase = (base) => (table) =>
 const handleRecord = (languages, table, record) => {
   table = table.toUpperCase();
   if (!languages[Object.keys(languages)[0]][table]) Object.keys(languages).forEach((key) => (languages[key][table] = {}));
-  Object.keys(languages).forEach(key => (languages[key][table][record.get('key').toUpperCase()] = record.get(key)));
+  Object.keys(languages).forEach(key => (languages[key][table][record.get('key').toUpperCase().replace(/\s/g, '_')] = record.get(key)));
 };
 
 const parse = async (apiKey, baseId) => {
