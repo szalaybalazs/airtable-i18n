@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Airtable = require('airtable');
 const util = require('util');
+const log = require('./log');
 
 const getBase = (base) => (table) =>
   new Promise((res, rej) => {
@@ -23,9 +24,10 @@ const handleRecord = (languages, table, record) => {
 };
 
 const parse = async (apiKey, baseId) => {
+  log('Contacting Airtable', '🔍', 2, 4);
   const base = new Airtable({ apiKey }).base(baseId);
   const records = getBase(base);
-
+  
   const tables = (await records('TABLES')).map((record) => record.get('name'));
   const meta = await records('Lng');
   const fields = { ...meta[0].fields };
@@ -34,9 +36,10 @@ const parse = async (apiKey, baseId) => {
   const languageKeys = Object.keys(fields);
   
   const languages = languageKeys.reduce((acc, key) => ({ ...acc, [key]: {} }), {});
-
+  
   meta.forEach((record) => handleRecord(languages, 'lng', record));
-
+  log('Retreiving translation', '🚡', 3, 4);
+  
   await Promise.all(tables.map(async (table) => (await records(table)).forEach((record) => handleRecord(languages, table, record))));
   return languages;
 };
@@ -53,6 +56,7 @@ const generate = async (languages, dir, beautify = false, format = 'js') => {
   if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 
   Promise.all(Object.keys(languages).map(key => createFile(`${dirPath}/${key}`, format, languages[key], beautify)));
+  log('Writing files', '🖊', 4, 4);
 };
 
 const generateTranslation = async (apikey, baseId, { output = '.', beutify = false, format = 'js' }) => {

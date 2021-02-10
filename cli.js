@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const program = require('commander');
 const path = require('path');
+const log = require('./log');
+const chalk = require('chalk');
 
 program
 	.version("1.0.1")
@@ -25,13 +27,21 @@ const options = {
 
 const { parse, generate } = require("./index.js");
 
+ 
+// const countdown = new CLI.Spinner('Contacting Airtable (1/2) ', ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷']);
+// countdown.start();
+
 (async () => {
-  if (!options.api) return console.log('Missing airtable API key.')
-  if (!options.base) return console.log('Missing airtable base id.')
   try {
+    log('Creating translations', '🔧', 1, 4);
+    if (!options.api) throw new Error('Missing airtable API key.');
+    if (!options.base) throw new Error('Missing airtable base id.');
+
     const languages = await parse(options.api, options.base);
-    generate(languages, options.directory, Boolean(options.beautify), options.format);
+    await generate(languages, options.directory, Boolean(options.beautify), options.format);
+
+    console.log(`🚂  Successfuly generated translations`);
   } catch (error) {
-    console.log('Failed to generate files: ', error);
+    console.log('Failed to generate files: ', error.message);
   }
 })();
