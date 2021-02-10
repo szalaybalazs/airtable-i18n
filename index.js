@@ -70,7 +70,7 @@ const generate = async (languages, dir, beautify = false, format = 'js', generat
 
 const generateTranslation = async (apikey, baseId, { output = '.', beutify = false, format = 'js', generateIndex = false }) => {
   const languages = await parse(apikey, baseId);
-  generate(languages, output, beutify, format, generateIndex;
+  generate(languages, output, beutify, format, generateIndex);
 }
 
 module.exports = {
