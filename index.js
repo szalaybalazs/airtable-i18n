@@ -51,17 +51,26 @@ const createFile = (filepath, format, content, beautify = false) => new Promise(
   fs.writeFile(`${filepath}.${format}`, data.current, { encoding: 'utf8' }, res)
 })
 
-const generate = async (languages, dir, beautify = false, format = 'js') => {
+const createIndex = (languages, format, filepath) => new Promise((res) => {
+  const data = { current: '' };
+  let content = '';
+  content += Object.keys(languages).map(key => `const ${key} = require('./${key}.${format}');`).join('\n');
+  content += `\n\nmodule.exports = { ${Object.keys(languages).join() } }; \n`;
+  fs.writeFile(filepath, content, { encoding: 'utf8' }, res)
+})
+
+const generate = async (languages, dir, beautify = false, format = 'js', generateIndex = false) => {
   const dirPath = path.resolve(dir);
   if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 
-  Promise.all(Object.keys(languages).map(key => createFile(`${dirPath}/${key}`, format, languages[key], beautify)));
   log('Writing files', '🖊', 4, 4);
+  await Promise.all(Object.keys(languages).map(key => createFile(`${dirPath}/${key}`, format, languages[key], beautify)));
+  if (generateIndex) await createIndex(languages, format, `${dirPath}/index.js`);
 };
 
-const generateTranslation = async (apikey, baseId, { output = '.', beutify = false, format = 'js' }) => {
+const generateTranslation = async (apikey, baseId, { output = '.', beutify = false, format = 'js', generateIndex = false }) => {
   const languages = await parse(apikey, baseId);
-  generate(languages, output, beutify, format);
+  generate(languages, output, beutify, format, generateIndex;
 }
 
 module.exports = {

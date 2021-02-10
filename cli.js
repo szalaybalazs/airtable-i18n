@@ -12,6 +12,7 @@ program
 	.option("-b, --beautify", "Beautify generated files")
 	.option("-f, --format <fileformat>", "Format of the output files")
 	.option("-e, --env <path>", "Path to .env file")
+	.option("-i, --index", "create index.js file with default exports")
 	.parse(process.argv);
 
 require('dotenv').config({ path: path.resolve(program.opts().env || './.env' )})
@@ -22,6 +23,7 @@ const options = {
 	api: process.env.AIRTABLE_I18N_API_KEY || program.opts().api,
 	base: process.env.AIRTABLE_I18N_BASE_ID || program.opts().base,
 	format:  process.env.AIRTABLE_I18N_TRANSLATION_FORMAT || program.opts().format || 'js',
+	index:  process.env.AIRTABLE_I18N_INDEX || program.opts().index,
 	beautify: program.opts().beautify,
 };
 
@@ -38,7 +40,7 @@ const { parse, generate } = require("./index.js");
     if (!options.base) throw new Error('Missing airtable base id.');
 
     const languages = await parse(options.api, options.base);
-    await generate(languages, options.directory, Boolean(options.beautify), options.format);
+    await generate(languages, options.directory, Boolean(options.beautify), options.format, options.index);
 
     console.log(`🚂  Successfuly generated translations`);
   } catch (error) {
