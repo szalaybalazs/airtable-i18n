@@ -74,21 +74,21 @@ AIRTABLE_I18N_TRANSLATION_FORMAT=<FILEFORMAT> - either js or json
 ### Example usage
 
 ```bash
-npx airtable-i18n -a <APIKEY> -b <BASEID> -d ./translation -f
+npx airtable-i18n -a <APIKEY> -b <BASEID> -d ./translation -b -f json
 ```
 
 or
 
 ```bash
 npm i -g airtable-i18n
-airtable-i18n -a <APIKEY> -b <BASEID> -d ./translation -f
+airtable-i18n -a <APIKEY> -b <BASEID> -d ./translation -b -f json
 ```
 
 ## Node package
 ```javascript
 const { generateTranslation } = require('./index');
 
-generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true });
+generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true, format: 'js' });
 ```
 
 ### Options
