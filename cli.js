@@ -6,8 +6,9 @@ program
 	.version("1.0.1")
 	.option("-d, --directory <directory>", "specify output directory")
 	.option("-a, --api <apikey>", "specify airtable apikey")
-	.option("-b, --base <baseid>", "specify base id")
-	.option("-f, --beautify", "Beautify generated files")
+	.option("-t, --base <baseid>", "specify base id")
+	.option("-b, --beautify", "Beautify generated files")
+	.option("-f, --format <fileformat>", "Format of the output files")
 	.option("-e, --env <path>", "Path to .env file")
 	.parse(process.argv);
 
@@ -18,6 +19,7 @@ const options = {
 	directory: process.env.AIRTABLE_I18N_DIRECTORY || program.opts().directory || '.',
 	api: process.env.AIRTABLE_I18N_API_KEY || program.opts().api,
 	base: process.env.AIRTABLE_I18N_BASE_ID || program.opts().base,
+	format:  process.env.AIRTABLE_I18N_TRANSLATION_FORMAT || program.opts().format || 'js',
 	beautify: program.opts().beautify,
 };
 
@@ -28,7 +30,7 @@ const { parse, generate } = require("./index.js");
   if (!options.base) return console.log('Missing airtable base id.')
   try {
     const languages = await parse(options.api, options.base);
-    generate(languages, options.directory, Boolean(options.beautify));
+    generate(languages, options.directory, Boolean(options.beautify), options.format);
   } catch (error) {
     console.log('Failed to generate files: ', error);
   }

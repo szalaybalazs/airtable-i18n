@@ -40,19 +40,19 @@ const parse = async (apiKey, baseId) => {
   return languages;
 };
 
-const generate = async (languages, dir, beautify = false) => {
+const generate = async (languages, dir, beautify = false, format = 'js') => {
   const dirPath = path.resolve(dir);
-  for (let i = 0; i < generate.split('/').length; i++) { 
-    const currentPath = path.split('/').slice(0, i).join('/');
+  for (let i = 0; i < dirPath.split('/').length; i++) { 
+    const currentPath = dirPath.split('/').slice(0, i).join('/');
     if (!currentPath) continue;
     if (!fs.existsSync(currentPath)) fs.mkdirSync(currentPath);
   }
-  Promise.all(Object.keys(languages).map(key => new Promise((res) => fs.writeFile(`${dirPath}/${key}.js`, JSON.stringify(languages[key], null, beautify ? 2 : 0), { encoding: 'utf8' }, res))));
+  Promise.all(Object.keys(languages).map(key => new Promise((res) => fs.writeFile(`${dirPath}/${key}.${format}`, `${format === 'js' ? 'module.exports = ' : ''}${JSON.stringify(languages[key], null, beautify ? 2 : 0)}`, { encoding: 'utf8' }, res))));
 };
 
-const generateTranslation = async (apikey, baseId, { output = '.', beutify = false }) => {
+const generateTranslation = async (apikey, baseId, { output = '.', beutify = false, format = 'js' }) => {
   const languages = await parse(apikey, baseId);
-  generate(languages, output, beutify);
+  generate(languages, output, beutify, format);
 }
 
 module.exports = {

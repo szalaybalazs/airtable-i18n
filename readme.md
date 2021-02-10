@@ -54,9 +54,10 @@ Automatise the CLI command to run before each commit to generate translations ea
 ### Options
 ```bash
 -a, --api <apikey> - Airtable APIKEY
--b, --base <baseid> - ID of the airtable base
+-t, --base <baseid> - ID of the airtable base
 -d, --directory <directory> - Output directory of translations - OPTIONAL - Default: the same directory
--f, --beautify - Whether to beautify the generated language files
+-b, --beautify - Whether to beautify the generated language files
+-f, --format - Format used to output the translations to
 -e, --env <path> - relative path to .env file - OPTIONAL - Default: the same directory
 ```
 
@@ -67,6 +68,7 @@ By default the command will search for an .env file in the same directory.
 AIRTABLE_I18N_DIRECTORY=<directory> - Example: .
 AIRTABLE_I18N_API_KEY=<APIKEY>
 AIRTABLE_I18N_BASE_ID=<BASEID>
+AIRTABLE_I18N_TRANSLATION_FORMAT=<FILEFORMAT> - either js or json
 ```
 
 ### Example usage
@@ -97,6 +99,7 @@ generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true })
 | BASEID | True | The ID of the airtable base | - |
 | output | false | The output directory for translations | '.' |
 | beautify | false | Whether to beautify the generated translation files | false |
+| format | false | The format of the output files | js |
 
 ## Access translation
 
