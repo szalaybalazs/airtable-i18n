@@ -42,7 +42,11 @@ const parse = async (apiKey, baseId) => {
 
 const generate = async (languages, dir, beautify = false) => {
   const dirPath = path.resolve(dir);
-  if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+  for (let i = 0; i < generate.split('/').length; i++) { 
+    const currentPath = path.split('/').slice(0, i).join('/');
+    if (!currentPath) continue;
+    if (!fs.existsSync(currentPath)) fs.mkdirSync(currentPath);
+  }
   Promise.all(Object.keys(languages).map(key => new Promise((res) => fs.writeFile(`${dirPath}/${key}.js`, JSON.stringify(languages[key], null, beautify ? 2 : 0), { encoding: 'utf8' }, res))));
 };
 
