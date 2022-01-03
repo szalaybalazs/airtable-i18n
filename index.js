@@ -35,7 +35,7 @@ const parse = async (apiKey, baseId, tableName) => {
   const records = getBase(base);
 
   const tables = (await records((tableName || "TABLES"))).map((record) => record.get("name"));
-  const meta = await records(tables[0]);
+  const meta = await records(tables.shift(0)); //get Lng table name from 1st element of TABLES index, removes it before used as well
   const fields = { ...meta[0].fields };
 
   delete fields.key;
