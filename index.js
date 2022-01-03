@@ -34,7 +34,7 @@ const parse = async (apiKey, baseId, tableName) => {
   const base = new Airtable({ apiKey }).base(baseId);
   const records = getBase(base);
 
-  const tables = (await records(tableName)).map((record) => record.get("name"));
+  const tables = (await records(tableName)).map((record) => record.get("name")).filter((i) => i);
 
   const meta = await records("Lng");
   const fields = { ...meta[0].fields };
