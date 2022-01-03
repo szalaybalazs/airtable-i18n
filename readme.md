@@ -35,6 +35,7 @@ Usage
 
 |name|
 |:--:|
+|Lng|
 |general|
 
 **general**

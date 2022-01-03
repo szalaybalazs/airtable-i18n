@@ -34,9 +34,8 @@ const parse = async (apiKey, baseId, tableName) => {
   const base = new Airtable({ apiKey }).base(baseId);
   const records = getBase(base);
 
-  const tables = (await records(tableName)).map((record) => record.get("name")).filter((i) => i);
-
-  const meta = await records("Lng");
+  const tables = (await records((tableName || "TABLES"))).map((record) => record.get("name"));
+  const meta = await records(tables[0]);
   const fields = { ...meta[0].fields };
 
   delete fields.key;
@@ -91,6 +90,7 @@ const generate = async (
   dir,
   beautify = false,
   format = "js",
+  tables = "TABLES",
   generateIndex = false
 ) => {
   const dirPath = path.resolve(dir);
