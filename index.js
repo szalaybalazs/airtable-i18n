@@ -11,7 +11,7 @@ const getBase = (base) => (table) =>
         maxRecords: 1000,
         view: "Grid view",
       })
-      .firstPage((err, records) => {
+      .all((err, records) => {
         if (err) return rej(err);
         res(records);
       });
