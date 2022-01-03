@@ -18,7 +18,7 @@ Usage
   
     1. Create a `Lng` table in the base, with fields: `key | lng1 | lng2`
 
-    2. Create a `TABLES` table with only one column, `name`, containing the name all the translation tables, except the `Lng` table.
+    2. Create an index table, named `TABLES` with only one column, `name`, containing the name all the translation tables, except the `Lng` table.
 
     3. Create your first translation table.
 
@@ -60,6 +60,7 @@ Automatise the CLI command to run before each commit to generate translations ea
 -f, --format - Format used to output the translations to
 -e, --env <path> - relative path to .env file - OPTIONAL - Default: the same directory
 -i, --index - provide flag to create an index.js file with all the exports
+-s, --tables <name> - specify the index table name - OPTIONAL - Default: TABLES
 ```
 
 By default the command will search for an .env file in the same directory.
@@ -71,6 +72,7 @@ AIRTABLE_I18N_API_KEY=<APIKEY>
 AIRTABLE_I18N_BASE_ID=<BASEID>
 AIRTABLE_I18N_TRANSLATION_FORMAT=<FILEFORMAT> - either js or json
 AIRTABLE_I18N_INDEX=any - provide to generate index.js file with all the exports
+AIRTABLE_I18N_TABLES=<NAME> - the name of the index table
 ```
 
 ### Example usage
@@ -90,7 +92,7 @@ airtable-i18n -a <APIKEY> -b <BASEID> -d ./translation -b -f json
 ```javascript
 const { generateTranslation } = require('./index');
 
-generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true, format: 'js' });
+generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true, format: 'js', tables:'TABLES' });
 ```
 
 ### Options
@@ -103,6 +105,7 @@ generateTranslation('<APIKEY>', '<BASEID>', { output: './lngs', beutify: true, f
 | beautify | false | Whether to beautify the generated translation files | false |
 | format | false | The format of the output files | js |
 | generateIndex | false | Whether to generate index.js file | false |
+| tables | false | The name of the index table | TABLES |
 
 ## Access translation
 

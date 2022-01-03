@@ -29,12 +29,13 @@ const handleRecord = (languages, table = "", record) => {
   );
 };
 
-const parse = async (apiKey, baseId) => {
+const parse = async (apiKey, baseId, tableName) => {
   log("Contacting Airtable", "🔍", 2, 4);
   const base = new Airtable({ apiKey }).base(baseId);
   const records = getBase(base);
 
-  const tables = (await records("TABLES")).map((record) => record.get("name"));
+  const tables = (await records(tableName)).map((record) => record.get("name"));
+
   const meta = await records("Lng");
   const fields = { ...meta[0].fields };
 
@@ -108,9 +109,9 @@ const generate = async (
 const generateTranslation = async (
   apikey,
   baseId,
-  { output = ".", beutify = false, format = "js", generateIndex = false }
+  { output = ".", beutify = false, format = "js", tables = "TABLES", generateIndex = false }
 ) => {
-  const languages = await parse(apikey, baseId);
+  const languages = await parse(apikey, baseId, tables);
   generate(languages, output, beutify, format, generateIndex);
 };
 
