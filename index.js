@@ -11,7 +11,7 @@ const getBase = (base) => (table) =>
         maxRecords: 1000,
         view: "Grid view",
       })
-      .firstPage((err, records) => {
+      .all((err, records) => {
         if (err) return rej(err);
         res(records);
       });
@@ -29,13 +29,13 @@ const handleRecord = (languages, table = "", record) => {
   );
 };
 
-const parse = async (apiKey, baseId) => {
+const parse = async (apiKey, baseId, tableName) => {
   log("Contacting Airtable", "🔍", 2, 4);
   const base = new Airtable({ apiKey }).base(baseId);
   const records = getBase(base);
 
-  const tables = (await records("TABLES")).map((record) => record.get("name"));
-  const meta = await records("Lng");
+  const tables = (await records((tableName || "TABLES"))).map((record) => record.get("name"));
+  const meta = await records(tables.shift(0)); //get Lng table name from 1st element of TABLES index, removes it before used as well
   const fields = { ...meta[0].fields };
 
   delete fields.key;
@@ -90,6 +90,7 @@ const generate = async (
   dir,
   beautify = false,
   format = "js",
+  tables = "TABLES",
   generateIndex = false
 ) => {
   const dirPath = path.resolve(dir);
@@ -108,9 +109,9 @@ const generate = async (
 const generateTranslation = async (
   apikey,
   baseId,
-  { output = ".", beutify = false, format = "js", generateIndex = false }
+  { output = ".", beutify = false, format = "js", tables = "TABLES", generateIndex = false }
 ) => {
-  const languages = await parse(apikey, baseId);
+  const languages = await parse(apikey, baseId, tables);
   generate(languages, output, beutify, format, generateIndex);
 };
 
